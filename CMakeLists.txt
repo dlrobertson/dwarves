@@ -74,6 +74,35 @@ if (NOT HAVE_REALLOCARRAY_SUPPORT)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DCOMPAT_NEED_REALLOCARRAY")
 endif()
 
+CHECK_C_SOURCE_COMPILES(
+"
+#include <obstack.h>
+int main(void)
+{
+        _obstack_begin(0, 0, 0, NULL, NULL);
+        return 0;
+}
+" LIBC_IMPLEMENTS_OBSTACK)
+if (NOT LIBC_IMPLEMENTS_OBSTACK)
+  find_package(OBSTACK)
+endif()
+
+CHECK_C_SOURCE_COMPILES(
+"
+#include <obstack.h>
+int main(void)
+{
+        int argc=1;
+        char *argv[]={\"argp\"};
+        argp_parse(0,argc,&argv,0,0,0); return 0;
+        return 0;
+}
+" LIBC_IMPLEMENTS_ARGP)
+
+if (NOT LIBC_IMPLEMENTS_ARGP)
+  find_package(ARGP)
+endif()
+
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64")
 
 file(GLOB libbpf_sources "lib/bpf/src/*.c")
@@ -91,7 +120,8 @@ set_target_properties(dwarves PROPERTIES VERSION 1.0.0 SOVERSION 1)
 set_target_properties(dwarves PROPERTIES INTERFACE_LINK_LIBRARIES "")
 target_include_directories(dwarves PRIVATE
 			   ${CMAKE_CURRENT_SOURCE_DIR}/lib/bpf/include/uapi)
-target_link_libraries(dwarves ${DWARF_LIBRARIES} ${ZLIB_LIBRARIES})
+target_link_libraries(dwarves ${DWARF_LIBRARIES} ${ZLIB_LIBRARIES}
+    ${ARGP_LIBRARY} ${OBSTACK_LIBRARY})
 
 set(dwarves_emit_LIB_SRCS dwarves_emit.c)
 add_library(dwarves_emit SHARED ${dwarves_emit_LIB_SRCS})

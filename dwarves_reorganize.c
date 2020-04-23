@@ -10,6 +10,7 @@
 #include "list.h"
 #include "dwarves_reorganize.h"
 #include "dwarves.h"
+#include "dutil.h"
 
 static void class__recalc_holes(struct class *class)
 {

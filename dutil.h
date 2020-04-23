@@ -15,6 +15,7 @@
 #include <elf.h>
 #include <gelf.h>
 #include <asm/bitsperlong.h>
+#include <linux/stddef.h>
 #include "rbtree.h"
 
 #define BITS_PER_LONG __BITS_PER_LONG

@@ -14,9 +14,11 @@
 
 static void print_malloc_stats(void)
 {
+#ifdef __GLIBC__
 	struct mallinfo m = mallinfo();
 
 	fprintf(stderr, "size: %u\n", m.uordblks);
+#endif
 }
 
 static int class__tag_name(struct tag *tag, struct cu *cu __unused,

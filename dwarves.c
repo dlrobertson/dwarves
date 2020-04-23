@@ -14,6 +14,7 @@
 #include <fcntl.h>
 #include <fnmatch.h>
 #include <libelf.h>
+#include <limits.h>
 #include <search.h>
 #include <stdio.h>
 #include <stdarg.h>
